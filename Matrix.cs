@@ -94,7 +94,7 @@ namespace LightweightMatrixCSharp
             for (int i = 0; i < rows; i++) this[i, k] = v[i, 0];
         }
 
-        public Matrix GetBlock(int startRow, int startCol, int cols, int rows)
+        public Matrix GetBlock(int startRow, int startCol, int rows, int cols)
         {
             if (startRow + rows > this.rows || startCol + cols > this.cols)
             {
@@ -110,8 +110,9 @@ namespace LightweightMatrixCSharp
             }
             return m;
         }
-        public Matrix SetBlock(int startRow, int startCol, int cols, int rows, Matrix m)
+        public Matrix SetBlock(int startRow, int startCol, int rows, int cols, Matrix m)
         {
+            // UnityEngine.Debug.Log("SetBlock: startRow: " + startRow + " startCol: " + startCol + " cols: " + cols + " rows: " + rows);
             if (startRow + rows > this.rows || startCol + cols > this.cols)
             {
                 throw new MException("SetBlock: out of bounds");
@@ -620,7 +621,7 @@ namespace LightweightMatrixCSharp
                 return StupidMultiply(m1, m2);
             }
         }
-        private static Matrix Multiply(double n, Matrix m)  // Multiplication by constant n
+        private static Matrix Multiply(double n, Matrix m)                          // Multiplication by constant n
         {
             Matrix r = new Matrix(m.rows, m.cols);
             for (int i = 0; i < m.rows; i++)
@@ -628,7 +629,7 @@ namespace LightweightMatrixCSharp
                     r[i, j] = m[i, j] * n;
             return r;
         }
-        private static Matrix Add(Matrix m1, Matrix m2) // Sčítání matic
+        private static Matrix Add(Matrix m1, Matrix m2)         // Sčítání matic
         {
             if (m1.rows != m2.rows || m1.cols != m2.cols) throw new MException("Matrices must have the same dimensions!");
             Matrix r = new Matrix(m1.rows, m1.cols);
@@ -675,6 +676,9 @@ namespace LightweightMatrixCSharp
 
         public static Matrix operator *(double n, Matrix m)
         { return Matrix.Multiply(n, m); }
+
+        public static Matrix operator /(Matrix m, double n)
+        { return Matrix.Multiply(1 / n, m); }
     }
 
     //  The class for exceptions
