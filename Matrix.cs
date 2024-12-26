@@ -130,6 +130,30 @@ namespace LightweightMatrixCSharp
             }
             return this;
         }
+        public double Norm()
+        {
+            // check is vector
+            if (cols == 1)
+            {
+                double sum = 0;
+                for (int i = 0; i < rows; i++)
+                {
+                    sum += this[i, 0] * this[i, 0];
+                }
+                return Math.Sqrt(sum);
+            }
+            throw new MException("Norm: not a vector");
+        }
+        public Matrix Diagonal(double[] e)
+        {
+            int n = e.Length;
+            Matrix m = new Matrix(n, n);
+            for (int i = 0; i < n; i++)
+            {
+                m[i, i] = e[i];
+            }
+            return m;
+        }
         public void MakeLU()                        // Function for LU decomposition
         {
             if (!IsSquare()) throw new MException("The matrix is not square!");
@@ -675,6 +699,9 @@ namespace LightweightMatrixCSharp
         { return Matrix.Multiply(m1, m2); }
 
         public static Matrix operator *(double n, Matrix m)
+        { return Matrix.Multiply(n, m); }
+
+        public static Matrix operator *(Matrix m, double n)
         { return Matrix.Multiply(n, m); }
 
         public static Matrix operator /(Matrix m, double n)
